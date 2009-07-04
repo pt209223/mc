@@ -18,11 +18,23 @@ public:
 
   // n must be between 1 .. (1<<16) + 1
   uint rand_int (uint n);
-  
+
   void test ();
   void test2 (uint k, uint n);
 };
 
 extern FastRandom global_random;
+
+class RandChance {
+
+  static const float prec; // precision 
+  FastRandom random;
+  uint threshold;
+
+public:
+  RandChance(float p);
+
+  bool test ();
+};
 
 #endif

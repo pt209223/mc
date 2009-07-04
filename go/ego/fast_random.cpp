@@ -24,6 +24,7 @@
 #include "fast_random.h"
 #include "testing.h"
 #include "cstdio"
+#include <sys/time.h> // for gettimeofday
 
 const int FastRandom::cnt = (uint(1)<<31) - 1;
 
@@ -92,4 +93,21 @@ void FastRandom::test2 (uint k, uint n) {
   delete[] bucket;
 }
 
-FastRandom global_random(time(NULL));
+static uint get_usecs(void)
+{
+  struct timeval tv;
+  gettimeofday(&tv, 0);
+  return tv.tv_usec;
+}
+
+FastRandom global_random(get_usecs());
+
+
+const float RandChance::prec = 1000.;
+
+RandChance::RandChance(float p) : random(get_usecs()), threshold(uint(p*prec)) { 
+}
+
+bool RandChance::test () {
+  return random.rand_int(uint(prec)) < threshold;
+}
