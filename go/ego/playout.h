@@ -127,10 +127,10 @@ private:
 
     for (uint i = 0; i < 3; ++i) {
       if (chances[i].test()) {
-        off = perms[0].off[random.rand_int(24)];
+        off = perms[i].off[random.rand_int(24)];
 
         for (uint j = 0; j < 4; ++j) {
-          Vertex v = Vertex(center.get_idx()+off[i]);
+          Vertex v = Vertex(center.get_idx()+off[j]);
           if (v.in_range() && 
               board->color_at[v] == Color::empty() &&
               !board->is_eyelike(act_player, v) &&
