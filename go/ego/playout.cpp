@@ -22,3 +22,44 @@
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include "playout.h"
+#include <algorithm>
+#include <cassert>
+
+static const LocalPolicy::Perms gen_perms(int a1, int a2, int a3, int a4) {
+  int i = 0, tab[4] = { a1, a2, a3, a4 };
+  LocalPolicy::Perms p;
+  
+  // first permutation is sorted (ascending order)
+  std::sort(tab, tab+4);
+  
+  do { // for each permutation
+    memcpy(p.off[i], tab, sizeof(int)*4);
+    ++i;
+  } while (std::next_permutation(tab, tab+4));
+
+  // last permutation is sorted (descending order)
+  
+  assert(i == 24);
+  return p;
+}
+
+const LocalPolicy::Perms LocalPolicy::perms[3] = {
+  // N,  S,  W,  E
+  gen_perms(
+      Vertex::dNS, -Vertex::dNS, 
+      Vertex::dWE, -Vertex::dWE)
+    ,
+  // NE, NW, SE, SW
+  gen_perms(
+      Vertex::dNS+Vertex::dWE, Vertex::dNS-Vertex::dWE, 
+      -Vertex::dNS+Vertex::dWE, -Vertex::dNS-Vertex::dWE)
+    ,
+  // NN, SS, WW, EE
+  gen_perms(
+      2*Vertex::dNS, -2*Vertex::dNS, 
+      2*Vertex::dWE, -2*Vertex::dWE)
+};
+
+RandChance LocalPolicy::chances[3] = {
+  RandChance(0.33), RandChance(0.33), RandChance(0.33) 
+};

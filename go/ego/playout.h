@@ -110,36 +110,37 @@ public:
     SimplePolicy::play_move(board);
   }
 
+  struct Perms { int off[24][4]; };
+
 private:
+  static const Perms perms[3];
+  static RandChance chances[3];
+
   all_inline
   bool play_local(Board *board) {
-    // P(local) = 1/3
-    if (random.rand_int(3)) return false;
-
     Vertex center = board->last_play();
     if ((center == Vertex::any()) |
         (center == Vertex::pass())) return false;
 
-    Vertex local[8];
     Player act_player = board->act_player ();
-    uint ii = 0;
+    const int *off;
 
-    // TODO this introduces serious bias due to non-empty moves
-    vertex_for_each_8_nbr(center, nbr, local[ii++] = nbr);
+    for (uint i = 0; i < 3; ++i) {
+      if (chances[i].test()) {
+        off = perms[0].off[random.rand_int(24)];
 
-    uint i_start = random.rand_int(8);
-    ii = i_start;
-
-    do {
-      Vertex v = local[ii];
-      if (board->color_at[v] == Color::empty() &&
-          !board->is_eyelike(act_player, v) &&
-          board->is_pseudo_legal(act_player, v)) {
-        board->play_legal(act_player, v);
-        return true;
-      }
-      ii = (ii + 1) & 7;
-    } while (ii != i_start);
+        for (uint j = 0; j < 4; ++j) {
+          Vertex v = Vertex(center.get_idx()+off[i]);
+          if (v.in_range() && 
+              board->color_at[v] == Color::empty() &&
+              !board->is_eyelike(act_player, v) &&
+              board->is_pseudo_legal(act_player, v)) {
+            board->play_legal(act_player, v);
+            return true; 
+          }
+        }
+      } 
+    }
 
     // No possibility of a local move
     return false;

@@ -33,8 +33,8 @@ namespace Benchmark {
 
   void do_playouts (uint playout_cnt, FastMap<Player, uint>* win_cnt) {
     static Board playout_board;
-    SimplePolicy policy(global_random);
-    Playout<SimplePolicy> playout(&policy, &playout_board);
+    LocalPolicy policy(global_random);
+    Playout<LocalPolicy> playout(&policy, &playout_board);
 
     rep (ii, playout_cnt) {
       playout_board.load (&empty_board);

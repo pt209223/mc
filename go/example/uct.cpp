@@ -369,7 +369,7 @@ private:
       assertc(mcts_ac, ok);
     }
 
-    Playout<SimplePolicy> (&policy, &play_board).run ();
+    Playout<LocalPolicy> (&policy, &play_board).run ();
 
     int score = play_board.playout_winner().to_score();
     tree.update_history (score); // black -> 1, white -> -1
@@ -404,8 +404,8 @@ private:
 
         Board playout_board;
         playout_board.load (&base_board.board());
-        SimplePolicy policy(global_random);
-        Playout<SimplePolicy> playout (&policy, &playout_board);
+        LocalPolicy policy(global_random);
+        Playout<LocalPolicy> playout (&policy, &playout_board);
         playout.run();
 
         showed_playout.clear();
@@ -453,7 +453,7 @@ private:
 
   FullBoard&    base_board;
   Tree          tree;      // TODO sync tree->root with base_board
-  SimplePolicy  policy;
+  LocalPolicy  policy;
 
   Board play_board;
 };

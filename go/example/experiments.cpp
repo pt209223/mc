@@ -58,7 +58,7 @@ public:
   float       influence_scale;
   float       prior;
   bool        progress_dots;
-  SimplePolicy policy;
+  LocalPolicy policy;
 
 public:
   AllAsFirst (Gtp& gtp, FullBoard& board_) : board (&board_), policy(global_random) { 
@@ -82,7 +82,7 @@ public:
     Board mc_board [1];
     mc_board->load (&base_board->board());
 
-    Playout<SimplePolicy> playout(&policy, mc_board);
+    Playout<LocalPolicy> playout(&policy, mc_board);
     playout.run ();
 
     uint aaf_move_count = uint (float(playout.move_history.size)*aaf_fraction);
