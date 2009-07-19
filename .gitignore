@@ -1,3 +1,6 @@
-binaries
 go/release_build
 go/clean_build
+bin/
+go/bin/
+experiments/
+go/experiments/
