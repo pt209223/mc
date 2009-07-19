@@ -171,7 +171,7 @@ public:
 
 private:
 
-  static const uint mcts_max_nodes = 1000000;
+  static const uint mcts_max_nodes = 100000;
 
   FastPool <Node> node_pool;
   vector<Node*> path;

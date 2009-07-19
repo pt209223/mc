@@ -61,5 +61,5 @@ const LocalPolicy::Perms LocalPolicy::perms[3] = {
 };
 
 RandChance LocalPolicy::chances[3] = {
-  RandChance(0.33), RandChance(0.33), RandChance(0.33) 
+  RandChance(0.25), RandChance(0.25), RandChance(0.25) 
 };
